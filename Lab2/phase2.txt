@@ -1,0 +1,67 @@
+GNU gdb (GDB) Red Hat Enterprise Linux (7.2-92.el6)
+Copyright (C) 2010 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/rlv220/CSE_202/cse_202/Lab2/bomb6/bomb...done.
+(gdb) break phase_2
+Breakpoint 1 at 0x400f26
+(gdb) run answers.txt
+Starting program: /home/rlv220/CSE_202/cse_202/Lab2/bomb6/bomb answers.txt
+Welcome to my fiendish little bomb. You have 6 phases with
+which to blow yourself up. Have a nice day!
+Phase 1 defused. How about the next one?
+1 2 3 4 5 6
+
+Breakpoint 1, 0x0000000000400f26 in phase_2 ()
+(gdb) disas
+Dump of assembler code for function phase_2:
+=> 0x0000000000400f26 <+0>:     push   %rbx
+   0x0000000000400f27 <+1>:     sub    $0x20,%rsp
+   0x0000000000400f2b <+5>:     mov    %rsp,%rsi
+   0x0000000000400f2e <+8>:     callq  0x4015f5 <read_six_numbers>
+
+   0x0000000000400f33 <+13>:    cmpl   $0x0,(%rsp)//compare to 0
+
+   0x0000000000400f37 <+17>:    js     0x400f40 <phase_2+26>//exploded if negative
+
+   0x0000000000400f39 <+19>:    mov    $0x1,%ebx//store 1 in ebx
+   0x0000000000400f3e <+24>:    jmp    0x400f51 <phase_2+43>
+
+   0x0000000000400f40 <+26>:    callq  0x4015bf <explode_bomb>
+   0x0000000000400f45 <+31>:    jmp    0x400f39 <phase_2+19>
+
+   0x0000000000400f47 <+33>:    add    $0x1,%rbx
+   0x0000000000400f4b <+37>:    cmp    $0x6,%rbx
+
+   0x0000000000400f4f <+41>:    je     0x400f63 <phase_2+61>
+   0x0000000000400f51 <+43>:    mov    %ebx,%eax//put 1 in eax
+
+
+   0x0000000000400f53 <+45>:    add    -0x4(%rsp,%rbx,4),%eax
+   0x0000000000400f57 <+49>:    cmp    %eax,(%rsp,%rbx,4)
+
+   0x0000000000400f5a <+52>:    je     0x400f47 <phase_2+33>
+   0x0000000000400f5c <+54>:    callq  0x4015bf <explode_bomb>
+   0x0000000000400f61 <+59>:    jmp    0x400f47 <phase_2+33>
+   0x0000000000400f63 <+61>:    add    $0x20,%rsp
+   0x0000000000400f67 <+65>:    pop    %rbx
+   0x0000000000400f68 <+66>:    retq
+End of assembler dump.
+
+
+0x0000000000400f33 <+13>:    cmpl   $0x0,(%rsp) -----> 0
+
+
+(gdb) until *0x0400f57
+0x0000000000400f57 in phase_2 ()
+(gdb) i r
+rax            0x2      2
+
+
+
+

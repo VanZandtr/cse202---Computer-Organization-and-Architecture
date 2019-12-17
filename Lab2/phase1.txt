@@ -1,0 +1,55 @@
+Breakpoint 1, 0x0000000000400f08 in phase_1 ()
+(gdb) disas
+Dump of assembler code for function phase_1:
+=> 0x0000000000400f08 <+0>:     sub    $0x8,%rsp
+   0x0000000000400f0c <+4>:     mov    $0x402550,%esi
+   0x0000000000400f11 <+9>:     callq  0x40135a <strings_not_equal>
+   0x0000000000400f16 <+14>:    test   %eax,%eax
+   0x0000000000400f18 <+16>:    jne    0x400f1f <phase_1+23>
+   0x0000000000400f1a <+18>:    add    $0x8,%rsp
+   0x0000000000400f1e <+22>:    retq
+   0x0000000000400f1f <+23>:    callq  0x4015bf <explode_bomb>
+   0x0000000000400f24 <+28>:    jmp    0x400f1a <phase_1+18>
+
+
+GNU gdb (GDB) Red Hat Enterprise Linux (7.2-92.el6)
+Copyright (C) 2010 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /home/rlv220/CSE_202/cse_202/Lab2/bomb6/bomb...done.
+"/home/rlv220/CSE_202/cse_202/Lab2/bomb6/bomb.c" is not a core dump: File format not recognized
+(gdb) break phase_1
+Breakpoint 1 at 0x400f08
+(gdb) run
+Starting program: /home/rlv220/CSE_202/cse_202/Lab2/bomb6/bomb
+Welcome to my fiendish little bomb. You have 6 phases with
+which to blow yourself up. Have a nice day!
+
+
+test
+
+Breakpoint 1, 0x0000000000400f08 in phase_1 ()
+(gdb) p/x $eax
+$1 = 0x604980
+(gdb) x /25c 0x40135a
+0x40135a <strings_not_equal>:   65 'A'  84 'T'  85 'U'  83 'S'  72 'H'  -119 '\211'     -5 '\373'       72 'H'
+0x401362 <strings_not_equal+8>: -119 '\211'     -11 '\365'      -24 '\350'      -44 '\324'      -1 '\377'       -1 '\377'       -1 '\377'     65 'A'
+0x40136a <strings_not_equal+16>:        -119 '\211'     -60 '\304'      72 'H'  -119 '\211'     -17 '\357'      -24 '\350'      -55 '\311'    -1 '\377'
+0x401372 <strings_not_equal+24>:        -1 '\377'
+(gdb) x /25c 0x604980
+0x604980 <input_strings>:       116 't' 101 'e' 115 's' 116 't' 0 '\000'        0 '\000'        0 '\000'        0 '\000'
+0x604988 <input_strings+8>:     0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'      0 '\000'
+0x604990 <input_strings+16>:    0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'        0 '\000'      0 '\000'
+0x604998 <input_strings+24>:    0 '\000'
+(gdb) x /25c 0x402550
+0x402550:       72 'H'  111 'o' 117 'u' 115 's' 101 'e' 115 's' 32 ' '  119 'w'
+0x402558:       105 'i' 108 'l' 108 'l' 32 ' '  98 'b'  101 'e' 103 'g' 97 'a'
+0x402560:       116 't' 32 ' '  106 'j' 111 'o' 98 'b'  115 's' 44 ','  32 ' '
+0x402568:       106 'j'
+
+strings bomb ------>Houses will begat jobs, jobs will begat houses.
